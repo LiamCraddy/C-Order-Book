@@ -75,6 +75,55 @@ void insert_price_level(OrderBook *order_book, PriceLevel *new_price_level, int 
         new_price_level->prev = NULL;
         return;
     }
+
+    PriceLevel *current = *head;
+    PriceLevel *prev = NULL;
+
+    while (current != NULL) {
+        if ((is_ask && new_price_level->price < current->price) || (!is_ask && new_price_level->price > current->price)) {
+            break;
+        }
+        prev = current;
+        current = current->next;
     
 
+    }
+    new_price_level->next = current;
+    new_price_level->prev = prev;
+
+    if (prev != NULL) {
+        prev->next = new_price_level;
+    } else {
+        *head = new_price_level;
+    }
+
+    if (current != NULL) {
+        current->prev = new_price_level;
+    }
+    return;
+}
+
+void remove_price_level(OrderBook *order_book, PriceLevel *price_level, int is_ask) {
+    if (order_book == NULL || price_level == NULL) {
+        return;
+    }
+
+    PriceLevel **head;
+    if (is_ask) {
+        head = &order_book->first_ask;
+    } else {
+        head = &order_book->first_bid;
+    }
+
+    if (price_level->prev != NULL) {
+        price_level->prev->next = price_level->next;
+    } else {
+        *head = price_level->next;
+    }
+
+    if (price_level->next != NULL) {
+        price_level->next->prev = price_level->prev;
+    }
+
+    destroy_price_level(price_level);
 }
