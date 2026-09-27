@@ -48,6 +48,8 @@ void add_order_to_price_level(PriceLevel *price_level, Order *order)  {
 
     price_level->total_quantity += order->quantity;
 }
+
+// Note: caller is responsible for updating the total_quantity of the price level when removing an order
 void remove_order_price_level(PriceLevel *price_level, Order *order) {
     if (price_level == NULL || order == NULL) {
         return;
@@ -69,7 +71,6 @@ void remove_order_price_level(PriceLevel *price_level, Order *order) {
         order->next->prev = order->prev;
     }
 
-    price_level->total_quantity -= order->quantity;
     order->next = NULL;
     order->prev = NULL;
 }
