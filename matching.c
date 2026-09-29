@@ -22,10 +22,8 @@ void match(OrderBook *order_book, Order *incoming_order) {
     } else {
         opposite_price_level = order_book->first_bid;
     }
-    if (opposite_price_level == NULL) {
-        return;
-    }
-    if (order_crosses(incoming_order, opposite_price_level)) {
+    
+    if (opposite_price_level!= NULL && order_crosses(incoming_order, opposite_price_level)) {
 
         while ((opposite_price_level != NULL && incoming_order->remaining_quantity > 0) 
         && order_crosses(incoming_order, opposite_price_level)) {
@@ -64,6 +62,18 @@ void match(OrderBook *order_book, Order *incoming_order) {
                 
         }
     }   
+    if (incoming_order->execution_type == ORDER_LIMIT && incoming_order->remaining_quantity > 0) {
+        PriceLevel *level = NULL;
+        int is_ask = (incoming_order->type == ORDER_TYPE_SELL);
+        find_price_level(order_book, incoming_order->price, is_ask, &level);
+        if (level != NULL) {
+            add_order_to_price_level(level, incoming_order);
+        } else {
+            PriceLevel *level = create_price_level(incoming_order->price);
+            insert_price_level(order_book, level, is_ask);
+            add_order_to_price_level(level, incoming_order);
+        }
+    }
 
 
     return;

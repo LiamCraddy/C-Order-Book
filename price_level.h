@@ -9,3 +9,9 @@ typedef struct PriceLevel {
     PriceLevel *next; // Pointer to the next price level in the order book
     PriceLevel *prev; // Pointer to the previous price level in the order book
 } PriceLevel;
+
+
+PriceLevel *create_price_level(int64_t price);
+void destroy_price_level(PriceLevel *price_level);
+void add_order_to_price_level(PriceLevel *price_level, Order *order);
+void remove_order_price_level(PriceLevel *price_level, Order *order);
