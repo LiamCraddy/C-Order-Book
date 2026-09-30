@@ -1,3 +1,6 @@
+#ifndef ORDER_H
+#define ORDER_H
+
 #include <stdint.h>
 
 typedef enum {
@@ -34,3 +37,5 @@ typedef struct Order {
 
 Order *create_order(uint64_t order_id, OrderType type, OrderExecutionType execution_type, int64_t price, uint64_t quantity, uint64_t timestamp);
 void destroy_order(Order *order);
+
+#endif
