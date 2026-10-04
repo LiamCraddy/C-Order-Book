@@ -50,7 +50,7 @@ int main() {
     match(orderbook, buy3);
     print_book(orderbook);
 
-
+    destroy_order_book(orderbook);
 
     printf("======================================\n");
     printf("              FINISHED                \n");
