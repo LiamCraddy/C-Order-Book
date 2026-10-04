@@ -2,7 +2,7 @@
 #include "matching.h"     
 #include "display.h"      
 #include <stdio.h>
-
+#include <inttypes.h>
 
 int main() {
     OrderBook *orderbook = create_order_book();
@@ -42,5 +42,18 @@ int main() {
     match(orderbook, bid2);
     print_book(orderbook);
 
+    Order *sell2 = create_order(4, ORDER_TYPE_SELL, ORDER_LIMIT, 10100, 40, 4);
+    match(orderbook, sell2);
+    print_book(orderbook);
+
+    Order *buy3 = create_order(5, ORDER_TYPE_BUY, ORDER_MARKET, 0, 100, 5);
+    match(orderbook, buy3);
+    print_book(orderbook);
+
+
+
+    printf("======================================\n");
+    printf("              FINISHED                \n");
+    printf("======================================\n");
     return 0;
 }
