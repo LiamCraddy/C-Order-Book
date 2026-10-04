@@ -22,6 +22,7 @@ int main() {
     }
     
     match(orderbook, resting_sell);
+    printf("hello");
 
     print_book(orderbook);
 
