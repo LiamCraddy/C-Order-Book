@@ -1,5 +1,6 @@
 #include "order_book.h"
 #include <stdio.h>
+#include <inttypes.h>
 
 int order_crosses(Order *incoming_order, PriceLevel *opposite_price_level) {
     if (incoming_order->execution_type == ORDER_MARKET) {
@@ -41,7 +42,7 @@ void match(OrderBook *order_book, Order *incoming_order) {
                 if (current_order->remaining_quantity == 0) {
                     Order *next_order = current_order->next;
                     remove_order_price_level(opposite_price_level, current_order);
-                    printf("Order %lu fully filled and removed from price level %ld\n", current_order->order_id, opposite_price_level->price);
+                    printf("Order %" PRIu64 " fully filled and removed from price level %" PRId64 ".%02" PRId64 "\n", current_order->order_id, opposite_price_level->price / 100, opposite_price_level->price % 100);
                     destroy_order(current_order);
                     current_order = next_order;
     
@@ -73,6 +74,9 @@ void match(OrderBook *order_book, Order *incoming_order) {
             insert_price_level(order_book, level, is_ask);
             add_order_to_price_level(level, incoming_order);
         }
+    }
+    if (incoming_order->remaining_quantity == 0 || incoming_order->execution_type == ORDER_MARKET) {
+        destroy_order(incoming_order);
     }
 
 
